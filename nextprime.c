@@ -25,7 +25,7 @@ int main()
 	
 	if(n==0)
 	{
-		printf("\n%d",2);
+		printf("\n%d",n+2);
 	}
 	else
 	{
