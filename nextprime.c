@@ -18,14 +18,18 @@ int main()
 		{
 			i=2;
 			a++;
-		}	
+		}
+			
 		i++;
 	}
 	
-	if(a == i )
+	if(n==0)
+	{
+		printf("\n%d",2);
+	}
+	else
 	{
 		printf("\n%d",a);
 	}
-	
 	return 0;
 }
