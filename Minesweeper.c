@@ -3,18 +3,10 @@
 #include <windows.h>
 
 void fill(int,int);
-void fillup(int,int);
-void fillupleft(int,int);
-void fillupright(int,int);
-void filldown(int,int);
-void filldownleft(int,int);
-void filldownright(int,int);
-void fillleft(int,int);
-void fillright(int,int);
 
-int a[6][6]={0},b[6][6],bomb[6][6]={0},move[6][6]={0}; //Initializes with zero
-int x,y,count=1,moveKey,n=0;    //Count for the number of clicks
-int Nbomb=1;	//Number of Bombs
+int a[6][6]={0},b[6][6],bomb[6][6]={0},move[6][6]={0},visit[6][6]={0}; //Initializes with zero
+int x,y,count=0,moveKey,n=0;    //Count for the number of clicks
+int Nbomb=5;	//Number of Bombs
 
 
 void displayBomb(int disp[][6])		//Display the MineField to the User
@@ -36,331 +28,56 @@ void displayBomb(int disp[][6])		//Display the MineField to the User
 void fill(int x,int y)
 {
     b[x][y]=a[x][y];
-    if(x!=0)
-    {
-        fillup(x-1,y);
-    }
-    if(x!=0 && y!=0)
-    {
-        fillupleft(x-1,y-1);
-    }
-    if(x!=0 && y!=5)
-    {
-        fillupright(x-1,y+1);
-    }
-    if(x!=5)
-    {
-        filldown(x+1,y);
-    }
-    if(x!=5 && y!=0)
-    {
-        filldownleft(x+1,y-1);
-    }
-    if(x!=5 && y!=5)
-    {
-        filldownright(x+1,y+1);
-    }
-    if(y!=0)
-    {
-        fillleft(x,y-1);
-    }
-    if(y!=5)
-    {
-        fillright(x,y+1);
-    }
-}
-
-void fillup(int x,int y)
-{
-    b[x][y]=a[x][y];
-    //displayBomb(a);
-    //printf("\nX is %d\tY is %d\tN Top is %d\n",x,y,n);
-    if(n<1000)
-    {
-
-    if(a[x][y]!=-1 && a[x][y]==0)
-    {
-        b[x][y]=a[x][y];
-        if(x!=0)
-        {
-            n++;
-            fillup(x-1,y);
-        }
-        if(x!=0 && y!=5)
-        {
-            n++;
-            fillupright(x-1,y+1);
-        }
-        if(x!=0 && y!=0)
-        {
-            n++;
-            fillupleft(x-1,y-1);
-        }
-        if(y!=0)
-        {
-            n++;
-            fillleft(x,y-1);
-        }
-        if(y!=5)
-        {
-            n++;
-            fillright(x,y+1);
-        }
-    }
-    }
-}
-
-void fillupleft(int x,int y)
-{
-    b[x][y]=a[x][y];
-    //displayBomb(a);
-    //printf("\nX is %d\tY is %d\tN TopLeft is %d\n",x,y,n);
-    if(n<1000)
-    {
-
-    if(a[x][y]!=-1 && a[x][y]==0)
-    {
-        b[x][y]=a[x][y];
-        if(x!=0 && y!=0)
-        {
-            n++;
-            fillupleft(x-1,y-1);
-        }
-
-        if(x!=0)
-        {
-            n++;
-            fillup(x-1,y);
-        }
-        if(x!=0 && y!=5)
-        {
-            n++;
-            fillupright(x-1,y+1);
-        }
-        if(y!=0)
-        {
-            n++;
-            fillleft(x,y-1);
-        }
-        if(y!=5)
-        {
-            n++;
-            fillright(x,y+1);
-        }
-    }
-    }
-}
-
-void fillupright(int x,int y)
-{
-    b[x][y]=a[x][y];
-    //displayBomb(a);
-    //printf("\nX is %d\tY is %d\tN TopRight is %d\n",x,y,n);
-    if(n<1000)
-    {
-
-    if(a[x][y]!=-1 && a[x][y]==0)
-    {
-        b[x][y]=a[x][y];
-        if(x!=0 && y!=5)
-        {
-            n++;
-            fillupright(x-1,y+1);
-        }
-        if(x!=0)
-        {
-            n++;
-            fillup(x-1,y);
-        }
-        if(x!=0 && y!=0)
-        {
-            n++;
-            fillupleft(x-1,y-1);
-        }
-        if(y!=0)
-        {
-            n++;
-            fillleft(x,y-1);
-        }
-        if(y!=5)
-        {
-            n++;
-            fillright(x,y+1);
-        }
-    }
-    }
-}
-
-void filldown(int x,int y)
-{
-    b[x][y]=a[x][y];
-    //displayBomb(a);
-    //printf("\nX is %d\tY is %d\tN Down is %d\n",x,y,n);
-    if(n<1000){
-    if(a[x][y]==0)
-    {
-        b[x][y]=a[x][y];
-        if(x!=5)
-        {
-            n++;
-            filldown(x+1,y);
-        }
-        if(x!=5 && y!=0)
-        {
-            n++;
-            filldownleft(x+1,y-1);
-        }
-        if(x!=5 && y!=5)
-        {
-            n++;
-            filldownright(x+1,y+1);
-        }
-        if(y!=0)
-        {
-            n++;
-            fillleft(x,y-1);
-        }
-        if(y!=5)
-        {
-            n++;
-            fillright(x,y+1);
-        }
-    }
-    }
-}
-
-void filldownleft(int x,int y)
-{
-    b[x][y]=a[x][y];
-    //displayBomb(a);
-    //printf("\nX is %d\tY is %d\tN DownLeft is %d\n",x,y,n);
-    if(n<1000){
-    if(a[x][y]==0)
-    {
-        b[x][y]=a[x][y];
-        if(x!=5 && y!=0)
-        {
-            n++;
-            filldownleft(x+1,y-1);
-        }
-        if(x!=5)
-        {
-            n++;
-            filldown(x+1,y);
-        }
-        if(x!=5 && y!=5)
-        {
-            n++;
-            filldownright(x+1,y+1);
-        }
-        if(y!=0)
-        {
-            n++;
-            fillleft(x,y-1);
-        }
-        if(y!=5)
-        {
-            n++;
-            fillright(x,y+1);
-        }
-    }
-    }
-}
-
-void filldownright(int x,int y)
-{
-    b[x][y]=a[x][y];
-    //displayBomb(a);
-    //printf("\nX is %d\tY is %d\tN DownRight is %d\n",x,y,n);
-    if(n<1000){
-    if(a[x][y]==0)
-    {
-        b[x][y]=a[x][y];
-        if(x!=5 && y!=5)
-        {
-            n++;
-            filldownright(x+1,y+1);
-        }
-        if(x!=5)
-        {
-            n++;
-            filldown(x+1,y);
-        }
-        if(x!=5 && y!=0)
-        {
-            n++;
-            filldownleft(x+1,y-1);
-        }
-        if(y!=0)
-        {
-            n++;
-            fillleft(x,y-1);
-        }
-        if(y!=5)
-        {
-            n++;
-            fillright(x,y+1);
-        }
-    }
-    }
-}
-
-void fillleft(int x,int y)
-{
-    b[x][y]=a[x][y];
     //displayBomb(b);
-    //printf("\nX is %d\tY is %d\n",x,y);
-    if(n<1000){
+    //printf("\nX is %d\tY is %d\tN is %d\n",x,y,n);
+    if(visit[x][y] != 1)
+    {
         if(a[x][y]!=-1 && a[x][y]==0)
         {
             b[x][y]=a[x][y];
+            if(x!=0)
+            {
+                visit[x][y]=1;
+                fill(x-1,y);
+            }
+            if(x!=0 && y!=5)
+            {
+                visit[x][y]=1;
+                fill(x-1,y+1);
+            }
+            if(x!=0 && y!=0)
+            {
+                visit[x][y]=1;
+                fill(x-1,y-1);
+            }
+            if(x!=5)
+            {
+                visit[x][y]=1;
+                fill(x+1,y);
+            }
+            if(x!=5 && y!=0)
+            {
+                visit[x][y]=1;
+                fill(x+1,y-1);
+            }
+            if(x!=5 && y!=5)
+            {
+                visit[x][y]=1;
+                fill(x+1,y+1);
+            }
             if(y!=0)
             {
-                n++;
-                fillleft(x,y-1);
+                visit[x][y]=1;
+                fill(x,y-1);
             }
-            if(x!=0)
-            {
-                n++;
-                fillup(x-1,y);
-            }
-            if(x!=5)
-            {
-                n++;
-                filldown(x+1,y);
-            }
-        }
-    }
-}
-
-void fillright(int x,int y)
-{
-    b[x][y]=a[x][y];
-    //displayBomb(b);
-    //printf("\nX is %d\tY is %d\n",x,y);
-    if(n<1000){
-        if(a[x][y]!=-1&& a[x][y]==0)
-        {
-            b[x][y]=a[x][y];
             if(y!=5)
             {
-                n++;
-                fillright(x,y+1);
-            }
-            if(x!=0)
-            {
-                n++;
-                fillup(x-1,y);
-            }
-            if(x!=5)
-            {
-                n++;
-                filldown(x+1,y);
+                visit[x][y]=1;
+                fill(x,y+1);
             }
         }
     }
 }
-
 
 void showMine(int x,int y)	//Stores the Clicked index to B-array
 {
@@ -389,7 +106,7 @@ int checkMove()		//Checks whether the position is already clicked
 void checkCount()	//Check the count for winning condition
 {
     int i,j;
-    count=1;
+    count=0;
     for(i=0;i<6;i++)
     {
         for(j=0;j<6;j++)
@@ -412,15 +129,8 @@ void play()		//Beginning of Game
         printf("\t\t-----MINESWEEPER GAME-----\t\t\n\n\n");
         moveKey=checkMove(x,y);
         checkCount();
-        printf("\n\n\nCount Before is :% d\n",count);
-        if(count >= (36-Nbomb))
-        {
-            printf("\n!!!!! You Won !!!!!\n");
-            printf("\nCongratzzzzzz\n");
-            displayBomb(bomb);
-            break;
-        }
-        else if(moveKey == -1)
+        //printf("\n\n\nCount Before is :% d\n",count);
+        if(moveKey == -1)
         {
             printf("\nThis Location is Clicked\n");
             displayBomb(b);
@@ -447,8 +157,16 @@ void play()		//Beginning of Game
                 checkCount();
                 displayBomb(b);
             }
-
-            printf("\n\n\nCount is :% d",count);
+            if(count >= (36-Nbomb))
+            {
+                system("cls");
+                printf("\n!!!!! You Won !!!!!\n");
+                printf("\nCongratzzzzzz\n");
+                //displayBomb(b);
+                displayBomb(bomb);
+                break;
+            }
+            //printf("\n\n\nCount is :% d",count);
         }
     }
 }
@@ -521,9 +239,7 @@ int checkBomb(int x,int y)	//Checks the surrounding of bomb
 int main(void)
 {
     int i,j,k=0;
-    randomBombLocation();
-    displayBomb(a);  //display the bomb array
-
+    //displayBomb(a);  //display the bomb array
     for(i=0;i<6;i++)
     {
         for(j=0;j<6;j++)
@@ -532,7 +248,9 @@ int main(void)
         }
     }
     printf("\t\t-----MINESWEEPER GAME-----\t\t\n\n\n");
-
+    printf("\nEnter The Number of Bombs::\n");
+    scanf("%d",&Nbomb);
+    randomBombLocation();
     displayBomb(b);
     play();
     return 0;
