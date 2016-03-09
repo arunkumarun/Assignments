@@ -4,8 +4,8 @@
 
 void fill(int,int);
 
-int a[6][6]={0},b[6][6],bomb[6][6]={0},move[6][6]={0},visit[6][6]={0}; //Initializes with zero
-int x,y,count=0,moveKey,n=0;    //Count for the number of clicks
+int a[6][6]={0},b[6][6],c[6][6],bomb[6][6]={0},move[6][6]={0},visit[6][6]={0},flag[6][6]={0}; //Initializes with zero
+int x,y,count=0,moveKey,n=0,choice,flagKey=0;    //Count for the number of clicks
 int Nbomb=5;	//Number of Bombs
 
 
@@ -27,14 +27,28 @@ void displayBomb(int disp[][6])		//Display the MineField to the User
 
 void fill(int x,int y)
 {
-    b[x][y]=a[x][y];
+    if(flag[x][y] != 1)
+    {
+        b[x][y]=c[x][y]=a[x][y];
+    }
+    else
+    {
+        b[x][y]=c[x][y]=-2;
+    }
     //displayBomb(b);
     //printf("\nX is %d\tY is %d\tN is %d\n",x,y,n);
     if(visit[x][y] != 1)
     {
-        if(a[x][y]!=-1 && a[x][y]==0)
+        if(a[x][y]!=-1 && a[x][y]==0 && flag[x][y] != 1)
         {
-            b[x][y]=a[x][y];
+            if(flag[x][y] != 1)
+            {
+                b[x][y]=c[x][y]=a[x][y];
+            }
+            else
+            {
+                b[x][y]=c[x][y]=-2;
+            }
             if(x!=0)
             {
                 visit[x][y]=1;
@@ -81,7 +95,7 @@ void fill(int x,int y)
 
 void showMine(int x,int y)	//Stores the Clicked index to B-array
 {
-    b[x][y] = a[x][y];
+    b[x][y] =c[x][y]= a[x][y];
 }
 
 int checkMove()		//Checks whether the position is already clicked
@@ -94,6 +108,10 @@ int checkMove()		//Checks whether the position is already clicked
             if(b[i][j] != 9)
             {
                 move[i][j]=1;
+            }
+            else
+            {
+                move[i][j]=0;
             }
         }
     }
@@ -111,7 +129,7 @@ void checkCount()	//Check the count for winning condition
     {
         for(j=0;j<6;j++)
         {
-            if(b[i][j] != 9 && a[i][j]!=-1)
+            if(b[i][j] != 9 && a[i][j]!=-1 && flag[i][j]!= 1)
             {
                 count++;
             }
@@ -119,55 +137,101 @@ void checkCount()	//Check the count for winning condition
     }
 }
 
+void checkFlag(int x,int y)
+{
+    if(flag[x][y] == 1)
+    {
+        flag[x][y]=0;
+        b[x][y]=c[x][y];
+        printf("\nUNFlagged the Location:::\n");
+    }
+    else
+    {
+        flag[x][y]=1;
+        b[x][y]=-2;
+        printf("\nFlagged the Location:::\n");
+    }
+}
+
+void win()
+{
+    system("cls");
+    printf("\n!!!!! You Won !!!!!\n");
+    printf("\nCongratzzzzzz\n");
+    //displayBomb(b);
+    displayBomb(bomb);
+}
+
 void play()		//Beginning of Game
 {
     while(1)
     {
-        printf("\nEnter the index you wanna click::");
-        scanf("%d%d",&x,&y);
-        system("cls");	//Clear the screen
-        printf("\t\t-----MINESWEEPER GAME-----\t\t\n\n\n");
-        moveKey=checkMove(x,y);
-        checkCount();
-        //printf("\n\n\nCount Before is :% d\n",count);
-        if(moveKey == -1)
+        printf("\nEnter the choice 1.Click 2.Flag::");
+        scanf("%d",&choice);
+        if(choice == 1)
         {
-            printf("\nThis Location is Clicked\n");
-            displayBomb(b);
+            printf("\nEnter the index you wanna click::");
+            scanf("%d%d",&x,&y);
+            system("cls");	//Clear the screen
+            printf("\t\t-----MINESWEEPER GAME-----\t\t\n\n\n");
+            moveKey=checkMove(x,y);
+            checkCount();
+            //printf("\n\n\nCount Before is :% d\n",count);
+            if(moveKey == -1)
+            {
+                printf("\nThis Location is Clicked\n");
+                displayBomb(b);
+            }
+            else
+            {
+                if(a[x][y] == -1 && flag[x][y] != 1)//Bomb is clicked
+                {
+                    //printf("\n\n\nCount is :% d",count);
+                    displayBomb(bomb);
+                    printf("\n**** -_- -_- Game Over -_- -_- ****\n\n");
+                    break;
+                }
+                else if(a[x][y] == 0 && flag[x][y]!=1)//Empty place is clicked
+                {
+                    fill(x,y);
+                    checkCount();
+                    displayBomb(b);
+                }
+                else		//Number is clicked
+                {
+                    if(flag[x][y]!=1)
+                    {
+                        showMine(x,y);
+                        checkCount();
+                        displayBomb(b);
+                    }
+                    else
+                    {
+                        printf("\nFlagged Position\n");
+                    }
+                }
+                if(count >= (36-Nbomb))
+                {
+                    win();
+                    break;
+                }
+
+            }
         }
         else
         {
-            if(a[x][y] == -1)//Bomb is clicked
-            {
-                printf("\n\n\nCount is :% d",count);
-                printf("\n**** -_- -_- Game Over -_- -_- ****\n\n");
-                displayBomb(bomb);
-                printf("\n**** -_- -_- Game Over -_- -_- ****\n\n");
-                break;
-            }
-            else if(a[x][y] == 0)//Empty place is clicked
-            {
-                fill(x,y);
-                checkCount();
-                displayBomb(b);
-            }
-            else		//Number is clicked
-            {
-                showMine(x,y);
-                checkCount();
-                displayBomb(b);
-            }
+            printf("\nEnter the index to flag::");
+            scanf("%d%d",&x,&y);
+            checkFlag(x,y);
+            checkCount();
             if(count >= (36-Nbomb))
             {
-                system("cls");
-                printf("\n!!!!! You Won !!!!!\n");
-                printf("\nCongratzzzzzz\n");
-                //displayBomb(b);
-                displayBomb(bomb);
+                win();
                 break;
             }
-            //printf("\n\n\nCount is :% d",count);
+            displayBomb(b);
         }
+        printf("\n\n\nCount is :% d",count);
     }
 }
 
@@ -240,14 +304,21 @@ int main(void)
 {
     int i,j,k=0;
     //displayBomb(a);  //display the bomb array
+
     for(i=0;i<6;i++)
     {
         for(j=0;j<6;j++)
         {
-            b[i][j] = 9;       //Initializing array to 9 for user
+            b[i][j] = 9;    //Initializing array to 9 for user
+            c[i][j] = 9;
         }
     }
     printf("\t\t-----MINESWEEPER GAME-----\t\t\n\n\n");
+    printf("\nInstructions:::\n1.The -1 are the bombs\n");
+    printf("2.The 0 are the empty space\n");
+    printf("3.The 9 are the unclicked space\n");
+    printf("4.The -2 are the flagged area\n");
+    printf("********Enjoy Playing*********\n");
     printf("\nEnter The Number of Bombs::\n");
     scanf("%d",&Nbomb);
     randomBombLocation();
