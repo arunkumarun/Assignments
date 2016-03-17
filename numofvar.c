@@ -63,7 +63,7 @@ int main()
 		}
 	}
 	check();
-	printf("\n%s\n",b);
+	/*printf("\n%s\n",b);
 
 	for(i=0;i<r;i++)
 	{
@@ -73,7 +73,8 @@ int main()
 		}
 		printf("\n");
 	}
-	printf("\nAfter Removal::\n");
+	*/
+	/*printf("\nAfter Removal::\n");
 	for(i=0;i<count;i++)
 	{
 		for(k=0;k<30;k++)
@@ -81,7 +82,7 @@ int main()
 			printf("%c ",dup[i][k]);		
 		}
 		printf("\n");
-	}
+	}*/
 	printf("\nNumber Of Variable is::%d\n",count);
 
 	return 0;
